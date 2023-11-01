@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.textarea-text {
+    width: 1000px;
+    height: 400px;
+}
+
+.save-button {
+    width: 100px;
+    margin-bottom: 15px;
+}

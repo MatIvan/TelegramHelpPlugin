@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head> 
+    <title>Help content for bot</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="style.css">
+    
+    <script>
+        async function loadData() {
+            let response = await fetch("/load", {
+                                    method: 'GET', 
+                                    credentials: 'include',
+                                })
+                                .then((response) => {
+                                    console.log("response code for load data is " + response.status);
+                                    console.log(response.statusText);
+                                    return response.text();
+                                })
+                                .then((data) => {
+                                    document.getElementById('content_textarea').innerHTML = data;
+                                });
+         };
+         
+         async function saveData() {
+             const textArea = document.getElementById('content_textarea');
+             const savedData = textArea.value;
+             
+             let response = await fetch("/save", {
+                                    method: 'POST', 
+                                    headers: {
+                                      'Accept': 'application/json',
+                                      'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({data: savedData}),
+                                    credentials: 'include',
+                                })
+                                .then((response) => {
+                                    if (response.ok) {
+                                        console.log("response code for save data is " + response.status);
+                                        document.getElementById('content_textarea').innerHTML = '';
+                                        loadData();
+                                    } else {
+                                        console.log("response code for save data is " + response.status);
+                                        console.log(response.statusText);
+                                        alert("data doesn't save")
+                                    }
+                                });
+         };
+         
+          window.onload = loadData();
+    </script> 
+</head>
+<body>
+    <h1>Page for save help content</h1>
+    <div class="container">
+        <button id="save_button" class="save-button" onclick="saveData()">Save</button>
+        <textarea id="content_textarea" class="textarea-text"> </textarea>
+     </div>
+</body>
+</html>
