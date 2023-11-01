@@ -14,6 +14,7 @@ import tikale.bot.help.entity.dto.MessageDto;
 import tikale.bot.help.entity.dto.MessageResponseDto;
 import tikale.bot.help.util.FileUtil;
 import tikale.bot.help.util.HttpUtill;
+import tikale.bot.help.util.StringUtil;
 
 @Component
 public class MessageJob {
@@ -21,6 +22,8 @@ public class MessageJob {
     private static final Logger LOG = LoggerFactory.getLogger(MessageJob.class);
 
     private static final String HELP = "/help";
+
+    private static final String ERROR_MESSAGE = "Unable to send data. See to log";
 
     @Autowired
     private HttpUtill httpUtill;
@@ -67,7 +70,8 @@ public class MessageJob {
         try {
             message.setMessage(fileUtil.load());
         } catch (Exception e) {
-            message.setMessage(e.getMessage());
+            LOG.error(StringUtil.ERROR_TEXT, e);
+            message.setMessage(ERROR_MESSAGE);
         }
 
         httpUtill.sendText(message);

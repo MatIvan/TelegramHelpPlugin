@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,14 +27,13 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
         LOG.error(e.getClass() + StringUtil.SPACE + e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
+
     @ExceptionHandler(DataFileUnableToSaveException.class)
     public ResponseEntity<String> handleException(DataFileUnableToSaveException e) {
         LOG.error(e.getClass() + StringUtil.SPACE + e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR) // 500
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<String> defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
         LOG.error(StringUtil.ERROR_TEXT, e);

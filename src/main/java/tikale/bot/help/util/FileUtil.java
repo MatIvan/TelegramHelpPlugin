@@ -38,7 +38,7 @@ public class FileUtil {
             byte[] bdata = FileCopyUtils.copyToByteArray(inputStream);
             String content = new String(bdata, StandardCharsets.UTF_8);
             return content;
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DataFileUnableToLoadException(e.getMessage());
         }
 
@@ -54,7 +54,7 @@ public class FileUtil {
             IOUtils.copy(inputStream, outputStream);
             outputStream.flush();
             outputStream.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new DataFileUnableToSaveException(e.getMessage());
         }
     }

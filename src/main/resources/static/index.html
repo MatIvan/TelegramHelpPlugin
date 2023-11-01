@@ -35,13 +35,12 @@
                                     credentials: 'include',
                                 })
                                 .then((response) => {
+                                    console.log("response code for save data is " + response.status);
+                                    
                                     if (response.ok) {
-                                        console.log("response code for save data is " + response.status);
                                         document.getElementById('content_textarea').innerHTML = '';
                                         loadData();
                                     } else {
-                                        console.log("response code for save data is " + response.status);
-                                        console.log(response.statusText);
                                         alert("data doesn't save")
                                     }
                                 });
