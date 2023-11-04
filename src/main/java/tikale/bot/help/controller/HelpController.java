@@ -15,7 +15,7 @@ public class HelpController {
     @Autowired
     private FileUtil fileUtil;
 
-    @PostMapping(value = "/save")
+    @PostMapping("/save")
     public void save(@RequestBody ClientSavedDto body) {
         fileUtil.save(body.getData());
     }

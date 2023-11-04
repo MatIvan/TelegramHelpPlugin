@@ -31,7 +31,7 @@ public class MessageJob {
     @Autowired
     private FileUtil fileUtil;
 
-    @Scheduled(fixedRate = 1000) //1 sec
+    @Scheduled(fixedRateString = "${message.get.fixedRate}", initialDelayString = "${message.get.initialDelay}")
     public void execute() {
         try {
             run();

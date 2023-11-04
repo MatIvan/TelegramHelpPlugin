@@ -4,6 +4,8 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -26,7 +28,7 @@ import tikale.bot.help.entity.dto.MessageResponseDto;
 @Service
 public class HttpUtill {
 
-    private static final long TIMEOUT = 1; // 2 sec
+    private static final Logger LOG = LoggerFactory.getLogger(HttpUtill.class);
 
     private static final String GET = "/get";
     private static final String SEND = "/send";
@@ -37,20 +39,22 @@ public class HttpUtill {
     private final RestTemplate restTemplate;
 
     @Autowired
-    public HttpUtill(RestTemplateBuilder restTemplateBuilder, @Value("${bot.host}") String host, @Value("${my.token}") String token) {
+    public HttpUtill(RestTemplateBuilder restTemplateBuilder, @Value("${bot.host}") String host, @Value("${my.token}") String token,
+            @Value("${http.timeout:1}") int timeout) {
         this.host = host;
         this.token = token;
         this.restTemplate = restTemplateBuilder
                 .requestFactory(() -> new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()))
                 .rootUri(this.host)
-                .setConnectTimeout(Duration.ofSeconds(TIMEOUT))
-                .setReadTimeout(Duration.ofSeconds(TIMEOUT))
+                .setConnectTimeout(Duration.ofSeconds(timeout))
+                .setReadTimeout(Duration.ofSeconds(timeout))
                 .errorHandler(new DefaultResponseErrorHandler())
                 .build();
 
     }
 
     public List<BotGetDto> get() {
+        LOG.trace("get message");
         HttpEntity<String> entity = new HttpEntity<String>(getHeader());
 
         ResponseEntity<List<BotGetDto>> response = this.restTemplate.exchange(
