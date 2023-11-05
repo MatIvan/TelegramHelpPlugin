@@ -7,11 +7,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
@@ -24,6 +28,9 @@ public class FileUtil {
 
     @Value("${data.file.name}")
     private String fileName;
+
+    @Value("${data.file.path}")
+    private String filePath;
 
     public FileUtil() {
         super();
@@ -61,9 +68,12 @@ public class FileUtil {
 
     private File getDataFile() {
         try {
-            ClassPathResource classPathResource = new ClassPathResource(fileName);
-            File file = classPathResource.getFile();
+            Path path = Paths.get(filePath).resolve(fileName);
+            Resource resource = new UrlResource(path.toUri());
+            File file = resource.getFile();
             return file;
+        } catch (MalformedURLException e) {
+            throw new DataFileNotFoundException(e.getMessage());
         } catch (IOException e) {
             throw new DataFileNotFoundException(e.getMessage());
         }
