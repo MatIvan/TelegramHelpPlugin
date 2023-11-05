@@ -4,10 +4,10 @@
     <title>Help content for bot</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="style.css">
-    
+    <script type="text/javascript" src="settings.js"></script>
     <script>
         async function loadData() {
-            let response = await fetch("/load", {
+            let response = await fetch(SERVER_BASE_URL + "/load", {
                                     method: 'GET', 
                                     credentials: 'include',
                                 })
@@ -25,7 +25,7 @@
              const textArea = document.getElementById('content_textarea');
              const savedData = textArea.value;
              
-             let response = await fetch("/save", {
+             let response = await fetch(SERVER_BASE_URL + "/save", {
                                     method: 'POST', 
                                     headers: {
                                       'Accept': 'application/json',
